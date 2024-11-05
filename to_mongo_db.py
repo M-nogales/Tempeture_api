@@ -2,14 +2,20 @@ import pandas as pd
 from pymongo import MongoClient
 from datetime import datetime
 # Conexión a MongoDB
-client = MongoClient("mongodb://localhost:27017/")  # Cambia la URL si tu servidor MongoDB es remoto
+client = MongoClient("mongodb://root:example@localhost:27017/")  # Cambia la URL si tu servidor MongoDB es remoto
 db = client['weather_database']
 
 # Leer el archivo CSV
 df = pd.read_csv('data/city_temperature.csv')
-print(df)
-# Procesamiento de datos
-df['Date'] = pd.to_datetime(df[['Year', 'Month', 'Day']])  # Crear una columna de fecha
+
+# filtrar si hay algún valor de Year con tres dígitos
+df = df[df['Year'] >= 1000 & (df['Day'] >= 1) & (df['Day'] <= 31)]
+
+# Verificar una fila en particular
+
+df['Date'] = pd.to_datetime(df[['Year', 'Month', 'Day']], errors='coerce')
+
+df = df.dropna(subset=['Date'])
 
 # Crear y poblar la colección de regiones
 region_collection = db['regions']
