@@ -3,6 +3,8 @@ env/
 .venv/
 venv/
 
+data/*
+
 # Ignorar archivos y carpetas de compilación de Python
 __pycache__/
 *.py[cod]
